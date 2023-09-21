@@ -62,7 +62,7 @@
 
 ## 개발 목적
 
-[Eggmoney]는 [Damn Vulnerable Bank](https://github.com/rewanthtammana/Damn-Vulnerable-Bank)의 API서버를 사용할 수 있도록 의도적으로 취약하게 만들어진 웹서버 입니다. 테스트 입니다.ㅇ
+[Eggmoney]는 [Damn Vulnerable Bank](https://github.com/rewanthtammana/Damn-Vulnerable-Bank)의 API서버를 사용할 수 있도록 의도적으로 취약하게 만들어진 웹서버 입니다.
 웹서버, Nodejs서버, 클라우드의 취약점을 찾아내고, 그 취약점을 이용해 공격하는 방법을 배울 수 있습니다. 
 
 ## 취약점 목록
