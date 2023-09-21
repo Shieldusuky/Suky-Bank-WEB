@@ -1,7 +1,7 @@
 <!-- 임시 README  -->
 
 <div align="center">
-    <h1>Gimmick yummy~~</h1>
+    <h1>Eggmoney Webserver</h1>
 </div>
 
 
