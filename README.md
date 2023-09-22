@@ -1,7 +1,7 @@
 <!-- 임시 README  -->
 
 <div align="center">
-    <h1>Eggmoney Webserver</h1>
+    <h1>쉴더수키 Webserver</h1>
 </div>
 
 
