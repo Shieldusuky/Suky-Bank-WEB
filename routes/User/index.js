@@ -6,6 +6,8 @@ var signup = require("./signup");
 var friend = require("./friend");
 var changePass = require("./changePass")
 var logout = require("./logout");
+var findPass = require("./findPass")
+var findPassnext = require("./findPassnext")
 
 router.use(express.static('public'));
 
@@ -14,6 +16,7 @@ router.use('/signup', signup);
 router.use('/friend', friend);
 router.use('/changePass', changePass);
 router.use('/logout', logout);
-
+router.use('/findPass', findPass);
+router.use('/findPassnext', findPassnext);
 
 module.exports = router;
