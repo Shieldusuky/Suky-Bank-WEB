@@ -10,9 +10,9 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-    const {username, password, email} = req.body;
+    const {username, password, email, phone} = req.body;
     const sha256Pass = sha256(password)
-    const baseData = `{"username": "${username}", "password": "${sha256Pass}", "email": "${email}", "sendtime": "${seoultime}"}`
+    const baseData = `{"username": "${username}", "password": "${sha256Pass}", "email": "${email}", "phone" :"${phone}", "sendtime": "${seoultime}"}`
     const enData = encryptResponse(baseData);
 
     axios({
