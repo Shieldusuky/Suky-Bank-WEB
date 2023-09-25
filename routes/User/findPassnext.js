@@ -19,7 +19,7 @@ router.post("/", (req, res) => {
     const check_password = req.body.check_password;
     const sha256Pass = sha256(new_password)
     const sha256Newpass = sha256(check_password)
-    const req_data = `{"username" : ${username}, "new_password" : "${sha256Pass}","check_password" : "${sha256Newpass}"}`
+    const req_data = `{"username" : ${username}, "next_new_password" : "${sha256Pass}","check_password" : "${sha256Newpass}"}`
     let resStatus = ""
     let resMessage = ""
 
@@ -30,10 +30,11 @@ router.post("/", (req, res) => {
     }).then((data) => {
         resStatus = decryptRequest(data.data).status
         resMessage = decryptRequest(data.data).data.message
+
         if (resStatus.code === 200) {
             return res.send("<script>alert('비밀번호가 변경되었습니다.');location.href = \"/user/login\";</script>");
         } else {
-            res.render("temp/login", {select: "login", message: resMessage})
+            res.render("temp/findPassnext", {select: "login", message: resMessage, username: username})
         }
     });
 })
