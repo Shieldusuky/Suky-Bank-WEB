@@ -9,7 +9,7 @@ const sha256 = require("js-sha256")
 /* GET users listing. */
 router.get('/', function (req, res, next) {
     // res.render("temp/findPass");
-    res.render("temp/findPass", {select: "login"});
+    res.render("temp/findPass", {select: "findPass"});
 });
 
 
@@ -20,14 +20,16 @@ router.post('/', function (req, res, next) {
 
     axios({
         method: "post",
-        url: api_url + "/api/user/login",
+        url: api_url + "/api/user/findPass",
         data: enData
     }).then((data) => {
         let result = decryptRequest(data.data);
+
         if (result.status.code == 200) {
-            return res.render("afterlogin", {data: data.data.enc_data});
+            var html_data = `<div class="text-center"><button style="width: 40%;" type="submit" formmethod="post" formaction="/user/login">인증 요청</button> &emsp;&emsp;&emsp;<a style="width: 40%;" onclick="location.href='/user/findPassnext'" class="mybtn">변경</a></div>`;
+            return res.render("temp/findPass", {html: "html_data"});
         } else {
-            return res.render("afterlogin");
+            return res.render("temp/findPass");
         }
     })
 });

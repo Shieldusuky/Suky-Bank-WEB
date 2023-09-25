@@ -41,9 +41,38 @@
                       <div class="sent-message">Your message has been sent. Thank you!</div>
                     </div> -->
                     <div class="text-center">
-                        <button style="width: 40%;" type="submit" formmethod="post" formaction="/user/login">인증 요청
-                        </button> &emsp;&emsp;&emsp;
-                        <a style="width: 40%;" onclick="location.href='/user/findPassnext'" class="mybtn">변경</a>
+                        <div class="text-center">
+                            <button style="width: 40%;" type="submit" formmethod="post" formaction="/user/login">인증 요청
+                            </button> &emsp;&emsp;&emsp;
+                            <button style="width: 40%;" type="submit">변경</button> &emsp;&emsp;&emsp;
+                            <!--<a style="width: 40%;" onclick="location.href='/user/findPassnext'" class="mybtn">변경</a>-->
+                        </div>
+                    </form>
+                    <script>
+                        // 웹 페이지가 로드된 후 실행할 함수
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // 웹 폼(form)을 제출할 때 이벤트 핸들러 등록
+                            const webForm = document.getElementById('webForm');
+                            webForm.addEventListener('submit', function(event) {
+                                // ID 값을 가져옵니다.
+                                const username = document.getElementById('username').value;
+    
+                                // ID 값을 API로 전송
+                                const apiUrl = api_url; // API의 URL을 여기에 입력하세요
+                                const xhr = new XMLHttpRequest();
+                                xhr.open('POST', apiUrl + '/api/user/findPassnext', true);
+                                xhr.setRequestHeader('Content-Type', 'application/json');
+                                const data = JSON.stringify({ username: username });
+                                xhr.send(data);
+    
+                                // 페이지 이동 방지를 위해 폼 제출을 중단합니다.
+                                event.preventDefault();
+                                
+                                // 웹 페이지로 이동
+                                window.location.href = '/user/findPassnext';
+                            });
+                        });
+                    </script>
                     </div>
                 </form>
             </div>

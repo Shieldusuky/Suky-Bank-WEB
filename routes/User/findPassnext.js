@@ -7,23 +7,23 @@ var router = express.Router();
 const checkCookie = require("../../middlewares/checkCookie")
 
 router.get('/', function (req, res, next) {
-    // res.render("temp/findPass");
+    // res.render("temp/findPassnext");
     res.render("temp/findPassnext", {select: "login"});
 });
 
 
 router.post("/", checkCookie, (req, res) => {
-    const {password, new_password} = req.body
-    const sha256Pass = sha256(password)
-    const sha256Newpass = sha256(new_password)
-    const req_data = `{"password" : "${sha256Pass}","new_password" : "${sha256Newpass}"}`
+    const {next_new_password, check_password} = req.body
+    const sha256Pass = sha256(next_new_password)
+    const sha256Newpass = sha256(check_password)
+    const req_data = `{"next_new_password" : "${sha256Pass}","check_password" : "${sha256Newpass}"}`
     const cookie = req.cookies.Token;
     let resStatus = ""
     let resMessage = ""
 
     axios({
         method: "post",
-        url: api_url + "/api/User/change-password",
+        url: api_url + "/api/User/findPassnext",
         headers: {"authorization": "1 " + cookie},
         data: encryptResponse(req_data)
     }).then((data) => {
@@ -32,7 +32,7 @@ router.post("/", checkCookie, (req, res) => {
         if (resStatus.code === 200) {
             return res.send("<script>alert('비밀번호가 변경되었습니다.');location.href = \"/user/login\";</script>");
         } else {
-            res.render("temp/changePass", {select: "login", message: resMessage})
+            res.render("temp/login", {select: "login", message: resMessage})
         }
     });
 })
