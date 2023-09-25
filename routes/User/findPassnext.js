@@ -3,28 +3,29 @@ const axios = require("axios");
 const {decryptRequest, decryptEnc, encryptResponse} = require("../../middlewares/crypt");
 const Response = require("../../middlewares/Response");
 const sha256 = require("js-sha256")
+
 var router = express.Router();
-const checkCookie = require("../../middlewares/checkCookie")
 
 router.get('/', function (req, res, next) {
     // res.render("temp/findPassnext");
-    res.render("temp/findPassnext", {select: "login"});
+    var username = req.query.username;
+    res.render("temp/findPassnext", {select: "login", username: username});
 });
 
 
-router.post("/", checkCookie, (req, res) => {
-    const {next_new_password, check_password} = req.body
-    const sha256Pass = sha256(next_new_password)
+router.post("/", (req, res) => {
+    const username = req.body.username;
+    const new_password = req.body.next_new_password;
+    const check_password = req.body.check_password;
+    const sha256Pass = sha256(new_password)
     const sha256Newpass = sha256(check_password)
-    const req_data = `{"next_new_password" : "${sha256Pass}","check_password" : "${sha256Newpass}"}`
-    const cookie = req.cookies.Token;
+    const req_data = `{"username" : ${username}, "new_password" : "${sha256Pass}","check_password" : "${sha256Newpass}"}`
     let resStatus = ""
     let resMessage = ""
 
     axios({
         method: "post",
         url: api_url + "/api/User/findPassnext",
-        headers: {"authorization": "1 " + cookie},
         data: encryptResponse(req_data)
     }).then((data) => {
         resStatus = decryptRequest(data.data).status

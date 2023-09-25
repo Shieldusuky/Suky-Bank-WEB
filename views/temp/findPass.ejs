@@ -25,7 +25,7 @@
     <section class="inner-page contact">
         <div class="container">
             <div class="col-lg-7 mt-5 mt-lg-0 d-flex justify-content-center" style="margin:0 auto;">
-                <form method="post" role="form" class="php-email-form">
+                <form method="get" action="/user/findPassnext" role="form" class="php-email-form">
 
                     <div class="form-group">
                         <label for="name">ID</label>
@@ -44,11 +44,11 @@
                         <div class="text-center">
                             <button style="width: 40%;" type="submit" formmethod="post" formaction="/user/login">인증 요청
                             </button> &emsp;&emsp;&emsp;
+                            <!-- button style="width: 40%;" type="submit" class="mybtn">변경</button> &emsp;&emsp;&emsp; -->
                             <button style="width: 40%;" type="submit">변경</button> &emsp;&emsp;&emsp;
-                            <!--<a style="width: 40%;" onclick="location.href='/user/findPassnext'" class="mybtn">변경</a>-->
                         </div>
                     </form>
-                    <script>
+                    <!-- <script>
                         // 웹 페이지가 로드된 후 실행할 함수
                         document.addEventListener('DOMContentLoaded', function() {
                             // 웹 폼(form)을 제출할 때 이벤트 핸들러 등록
@@ -72,7 +72,7 @@
                                 window.location.href = '/user/findPassnext';
                             });
                         });
-                    </script>
+                    </script> -->
                     </div>
                 </form>
             </div>
