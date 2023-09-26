@@ -2,8 +2,12 @@ var express = require('express');
 var router = express.Router();
 const axios = require("axios");
 const profile = require('../../middlewares/profile');
-const {decryptRequest} = require("../../middlewares/crypt")
+const {decryptRequest, encryptResponse} = require("../../middlewares/crypt")
 const checkCookie = require("../../middlewares/checkCookie");
+const IpCheck = require('../../middlewares/IpCheck');
+var userdb = require('../../middlewares/userdb');
+
+/* !!! GOLD는 가짜버튼 !!! */
 
 HTML_MEMBER = `
     <thead>
@@ -49,7 +53,7 @@ router.get('/', checkCookie, function (req, res) {
             if(Array.isArray(resData))
             {
                 html +=
-                    "<h2 align='center'>환영합니다, 관리자님!</h2><br>\n" +
+                    "<h2 align='center'>환영합니다, 관리자님!</h2>\n" +
                     "<thead>\n" +
                     "   <tr>\n" +
                     "      <th>사용자명</th>\n" +
@@ -63,8 +67,8 @@ router.get('/', checkCookie, function (req, res) {
                         <tr>
                             <td>${x.username}</td>
                             <td>${x.membership}</td>
-                            <td><a href="/bank/admin/approve?id=${x.id}" class="btn btn-secondary btn-user btn-block">GOLD로 승급</td>
-                            <td><a href="/bank/admin/approve?id=${x.id}" class="btn btn-info btn-user btn-block">PREMIUM으로 승급</td>
+                            <td><a class="btn btn-secondary btn-user btn-block">GOLD로 승급</td>
+                            <td><a href="/bank/membership/change?id=${x.id}" class="btn btn-info btn-user btn-block">PREMIUM으로 승급</td>
                         </tr>
                     </tbody>`
                 })
@@ -73,7 +77,7 @@ router.get('/', checkCookie, function (req, res) {
                     html += "<h2>아니??? 이 사이트에는 멤버십을 관리할 유저가 없습니다!!!</h2>"
                 }
                 else {
-                    html += `<h2 align='center'>회원님의 멤버십 등급은 ${resData.membership}등급입니다.</h2><br>`
+                    html += `<h2 align='center'>회원님의 멤버십 등급은 ${resData.membership}등급입니다.</h2>`
                     html += HTML_MEMBER
                 }
             } else {
@@ -82,6 +86,17 @@ router.get('/', checkCookie, function (req, res) {
             res.render("Banking/membership", {html: html, pending: pending, select: "membership"})
         })
     })
+});
+
+router.get('/change', [checkCookie, IpCheck], function (req, res, next) {
+    const id = req.query.id;
+    userdb.query(`UPDATE users
+                  SET membership = 'PREMIUM'
+                  WHERE id =${id};`, function (error, results) {
+        if (error) { throw error; }
+    });
+
+    return res.redirect("/bank/membership")
 });
 
 module.exports = router;
