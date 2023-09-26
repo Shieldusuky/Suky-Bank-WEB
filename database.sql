@@ -7,6 +7,7 @@ create table users
     id             integer PRIMARY KEY auto_increment,
     username       varchar(100) UNIQUE           NOT NULL,
     password       varchar(1024)                 NOT NULL,
+    phone          varchar(20) UNIQUE            NOT NULL,
     account_number integer UNIQUE,
     balance        BIGINT unsigned default 10000 NOT NULL,
     is_admin       boolean         default false,
@@ -32,7 +33,7 @@ create table beneficiaries
 
 INSERT INTO `users`
 
-values (default, "admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", 999999, default, true,
+values (default, "admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "01011111111", 999999, default, true,
         'admin@admin');
 
 drop database if exists board;
