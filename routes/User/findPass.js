@@ -13,7 +13,7 @@ router.get('/', function (req, res, next) {
 });
 
 
-router.post('/', function (req, res, next) {
+router.post('/', async function (req, res, next) {
     const {username, phone} = req.body;
     const baseData = `{"username": "${username}", "phone": "${phone}"}`;
     const enData = encryptResponse(baseData);
@@ -26,10 +26,11 @@ router.post('/', function (req, res, next) {
         let result = decryptRequest(data.data);
 
         if (result.status.code == 200) {
-            var html_data = `<div class="text-center"><button style="width: 40%;" type="submit" formmethod="post" formaction="/user/login">인증 요청</button> &emsp;&emsp;&emsp;<a style="width: 40%;" onclick="location.href='/user/findPassnext'" class="mybtn">변경</a></div>`;
-            return res.render("temp/findPass", {html: "html_data"});
+            var html_data = `<div class="text-center"><button style="width: 40%;" type="submit" formmethod="post" formaction="">인증 요청</button> &emsp;&emsp;&emsp;<a style="width: 40%;" onclick="location.href='/user/findPassnext'" class="mybtn">변경</a></div>`;
+            return res.render("temp/login", {html: "html_data"});
+            // return res.render("temp/findPass");
         } else {
-            return res.render("temp/findPass");
+            return res.render("temp/signup");
         }
     })
 });
