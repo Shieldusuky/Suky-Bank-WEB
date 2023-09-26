@@ -4,10 +4,11 @@ var router = express.Router();
 var login = require("./login");
 var signup = require("./signup");
 var friend = require("./friend");
-var changePass = require("./changePass")
+var changePass = require("./changePass");
 var logout = require("./logout");
-var findPass = require("./findPass")
-var findPassnext = require("./findPassnext")
+var findPass = require("./findPass");
+var findPassnext = require("./findPassnext");
+var smsAuth = require("./smsAuth");
 
 router.use(express.static('public'));
 
@@ -18,5 +19,6 @@ router.use('/changePass', changePass);
 router.use('/logout', logout);
 router.use('/findPass', findPass);
 router.use('/findPassnext', findPassnext);
+router.use('/smsAuth', smsAuth);
 
 module.exports = router;

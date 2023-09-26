@@ -26,11 +26,23 @@ router.post('/', async function (req, res, next) {
         let result = decryptRequest(data.data);
 
         if (result.status.code == 200) {
-            var html_data = `<div class="text-center"><button style="width: 40%;" type="submit" formmethod="post" formaction="">인증 요청</button> &emsp;&emsp;&emsp;<a style="width: 40%;" onclick="location.href='/user/findPassnext'" class="mybtn">변경</a></div>`;
-            return res.render("temp/login", {html: "html_data"});
-            // return res.render("temp/findPass");
+            // const coolsms = require('coolsms-node-sdk').default;
+            // // apiKey, apiSecret 설정
+            // const messageService = new coolsms('NCSXDF6SVD0EQ9MX', 'ZT7GHUS1DXIX4R9IT7GIEN2VCTVB0Q9A');
+
+            // // 2건 이상의 메시지를 발송할 때는 sendMany, 단일 건 메시지 발송은 sendOne을 이용해야 합니다. 
+            // messageService.sendOne(
+            //     {
+            //     to: "01025128819",
+            //     from: "01025128819",
+            //     text: "test"
+            //     }
+            //     // 1만건까지 추가 가능
+            // ).then(res => console.log(res))
+            // .catch(err => console.error(err));
+            return res.render("temp/smsAuth", {select: "login"});
         } else {
-            return res.render("temp/signup");
+            return res.render("temp/findPass");
         }
     })
 });
