@@ -19,7 +19,7 @@ router.post("/", (req, res) => {
     const check_password = req.body.check_password;
     const sha256Pass = sha256(new_password)
     const sha256Newpass = sha256(check_password)
-    const req_data = `{"username" : ${username}, "next_new_password" : "${sha256Pass}","check_password" : "${sha256Newpass}"}`
+    const req_data = `{"username" : "${username}", "next_new_password" : "${sha256Pass}","check_password" : "${sha256Newpass}"}`
     let resStatus = ""
     let resMessage = ""
 
