@@ -1,67 +1,87 @@
 var express = require('express');
 var router = express.Router();
-var axios = require("axios");
-var {decryptRequest} = require("../../middlewares/crypt");
+const axios = require("axios");
 const profile = require('../../middlewares/profile');
+const {decryptRequest} = require("../../middlewares/crypt")
 const checkCookie = require("../../middlewares/checkCookie");
 
+HTML_MEMBER = `
+    <thead>
+        <tr>
+            <th>회원 등급</th>
+            <th>FRIEND</th>
+            <th>GOLD</th>
+            <th>PREMIUM</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><b>누적 이용 기간</b></td>
+            <td>최초 가입</td>
+            <td>1달 이상</td>
+            <td>1년 이상</td>
+        </tr>
+        <tr>
+            <td><b>거래 한도</b></td>
+            <td>하루 최대 $ 10,000</td>
+            <td>하루 최대 $ 50,000</td>
+            <td>하루 최대 $ 10,000,000</td>
+        </tr>
+        <tr>
+            <td><b>비고</b></td>
+            <td colspan="3">등급에 관한 자세한 문의는 관리자에게 해 주세요.</td>
+        </tr>
+    </tbody>`
+
 router.get('/', checkCookie, function (req, res) {
-    const cookie = req.cookies.Token;
+    const cookie = req.cookies.Token
 
     profile(cookie).then(pending => {
-
         axios({
             method: "post",
-            url: api_url + "/api/user/profile",
+            url: api_url + "/api/beneficiary/ceiling",
             headers: {"authorization": "1 " + cookie}
         }).then((data) => {
-            let result = decryptRequest(data.data).data;
-            var html_data = ``;
-            
-            if(result.membership == "FRIEND") {
-                html_data = `<h2 align='center'>회원님의 멤버십 등급은 FRIEND등급입니다.</h2>
-                <p align='center'>멤버십 등급이 높아지면 지금보다 더 많은 특별한 혜택을 경험할 수 있습니다.</p>`
-            } else if (result.membership == "ADMIN") {
-                html_data = `<h2 align='center'>당신은 관리자입니다.</h2>
-                <p align='center'>환영합니다, 관리자님!</p>`       
-            } else {
-                html_data = `<h2 align='center'>회원님의 멤버십 등급은 ${result.membership}등급입니다.</h2>
-                <p align='center'>축하합니다! 이제 ${result.membership}등급의 모든 혜택을 경험할 수 있습니다.</p>`
-            }
+            let html = ""
+            const resStatus = decryptRequest(data.data).status;
+            const resData = decryptRequest(data.data).data;
 
-            html_data += `<thead>
-            <tr>
-                <th>회원등급</th>
-                <th>FRIEND</th>
-                <th>GOLD</th>
-                <th>PREMIUM</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><b>누적 이용 횟수</b></td>
-                <td>최초 가입</td>
-                <td>100회 이상</td>
-                <td>100,000회 이상</td>
-            </tr>
-            <tr>
-                <td><b>회원 혜택</b></td>
-                <td>포인트 적립 가능</td>
-                <td>포인트 적립 시 3% 추가 적립<br>이체 수수료 3% 할인</td>
-                <td>포인트 적립 시 10% 추가 적립<br>이체 수수료 10% 할인</td>
-            </tr>
-            <tr>
-                <td><b>비고</b></td>
-                <td colspan="3">멤버십 페이지를 모의해킹에 쓸 수 있을지 궁금합니다.</td>
-            </tr>
-            </tbody>
-            `
-            return res.render("Banking/membership", {html: html_data, pending: pending, select: "membership"});
-        }).catch(function (error) {
-            var html_data = "<tr>에러</tr>";
-            return res.render("Banking/membership", {html: html_data, pending: pending, select: "membership"});
-        });
+            if(Array.isArray(resData))
+            {
+                html +=
+                    "<h2 align='center'>환영합니다, 관리자님!</h2><br>\n" +
+                    "<thead>\n" +
+                    "   <tr>\n" +
+                    "      <th>사용자명</th>\n" +
+                    "      <th>현재 멤버십</th>\n" +
+                    "      <th colspan='2'>권한 상승</th>\n" +
+                    "   </tr>\n" +
+                    "</thead>\n"
+                resData.forEach(x => {
+                    html += 
+                    `<tbody>
+                        <tr>
+                            <td>${x.username}</td>
+                            <td>${x.membership}</td>
+                            <td><a href="/bank/admin/approve?id=${x.id}" class="btn btn-secondary btn-user btn-block">GOLD로 승급</td>
+                            <td><a href="/bank/admin/approve?id=${x.id}" class="btn btn-info btn-user btn-block">PREMIUM으로 승급</td>
+                        </tr>
+                    </tbody>`
+                })
+            } else if (resStatus.code === 200) {
+                if(resData.membership === "ADMIN") {
+                    html += "<h2>아니??? 이 사이트에는 멤버십을 관리할 유저가 없습니다!!!</h2>"
+                }
+                else {
+                    html += `<h2 align='center'>회원님의 멤버십 등급은 ${resData.membership}등급입니다.</h2><br>`
+                    html += HTML_MEMBER
+                }
+            } else {
+                html += "<h2>오류시군요!!!</h2>"
+            }
+            res.render("Banking/membership", {html: html, pending: pending, select: "membership"})
+        })
     })
-})
+});
 
 module.exports = router;

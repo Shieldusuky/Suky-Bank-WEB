@@ -11,7 +11,8 @@ create table users
     account_number integer UNIQUE,
     balance        BIGINT unsigned default 10000 NOT NULL,
     is_admin       boolean         default false,
-    email          varchar(255)                  NOT NULL
+    email          varchar(255)                  NOT NULL,
+    membership     varchar(255)                  NOT NULL
 ) engine = innodb;
 
 create table transactions
@@ -34,7 +35,7 @@ create table beneficiaries
 INSERT INTO `users`
 
 values (default, "admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "01011111111", 999999, default, true,
-        'admin@admin');
+        'admin@admin', 'ADMIN');
 
 drop database if exists board;
 create database if not exists board;
