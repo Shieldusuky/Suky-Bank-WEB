@@ -12,7 +12,7 @@ create table users
     balance        BIGINT unsigned default 10000 NOT NULL,
     is_admin       boolean         default false,
     email          varchar(255)                  NOT NULL,
-    membership     varchar(255)                  NOT NULL
+    membership     varchar(255)    default "FRIEND" NOT NULL
 ) engine = innodb;
 
 create table transactions
