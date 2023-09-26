@@ -12,7 +12,7 @@ create table users
     balance        BIGINT unsigned default 10000 NOT NULL,
     is_admin       boolean         default false,
     email          varchar(255)                  NOT NULL,
-    membership     varchar(255)    default "FRIEND" NOT NULL
+    membership     varchar(255)                  NOT NULL
 ) engine = innodb;
 
 create table transactions
@@ -30,6 +30,13 @@ create table beneficiaries
     account_number             int(11)               NOT NULL,
     beneficiary_account_number int(11)               NOT NULL,
     approved                   boolean default false NOT NULL
+) engine = innodb;
+
+create table smsauth
+(
+    id                         integer PRIMARY KEY auto_increment,
+    username                   varchar(100) UNIQUE   NOT NULL,
+    authnum                    integer
 ) engine = innodb;
 
 INSERT INTO `users`
