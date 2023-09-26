@@ -61,7 +61,9 @@ router.get('/', checkCookie, function (req, res) {
                     "      <th colspan='2'>권한 상승</th>\n" +
                     "   </tr>\n" +
                     "</thead>\n"
-                resData.forEach(x => {
+                
+                const printData = resData.slice(1,)
+                printData.forEach(x => {
                     html += 
                     `<tbody>
                         <tr>
