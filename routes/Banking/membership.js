@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const axios = require("axios");
 const profile = require('../../middlewares/profile');
-const {decryptRequest, encryptResponse} = require("../../middlewares/crypt")
+const {decryptRequest} = require("../../middlewares/crypt")
 const checkCookie = require("../../middlewares/checkCookie");
 const IpCheck = require('../../middlewares/IpCheck');
 var userdb = require('../../middlewares/userdb');
@@ -76,14 +76,14 @@ router.get('/', checkCookie, function (req, res) {
                 })
             } else if (resStatus.code === 200) {
                 if(resData.membership === "ADMIN") {
-                    html += "<h2>아니??? 이 사이트에는 멤버십을 관리할 유저가 없습니다!!!</h2>"
+                    html += "<h2>이 사이트에는 멤버십을 관리할 유저가 없습니다.</h2>"
                 }
                 else {
                     html += `<h2 align='center'>회원님의 멤버십 등급은 ${resData.membership}등급입니다.</h2>`
                     html += HTML_MEMBER
                 }
             } else {
-                html += "<h2>오류시군요!!!</h2>"
+                html += "<h2>오류입니다.</h2>"
             }
             res.render("Banking/membership", {html: html, pending: pending, select: "membership"})
         })

@@ -16,7 +16,7 @@ const profile = async (cookie) => {
     } else if (left === "PREMIUM") {
         data2.data.rest = "$ 1000000"
     } else if (left === "ADMIN") {
-        data2.data.rest = "ADMIN"
+        data2.data.rest = "무제한"
     } else {
         data2.data.rest = ""
     }
