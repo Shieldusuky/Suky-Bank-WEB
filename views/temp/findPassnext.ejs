@@ -29,9 +29,12 @@
             <div class="col-lg-7 mt-5 mt-lg-0 d-flex justify-content-center" style="margin:0 auto;">
                 <form method="post" action="/user/findPassnext" role="form" class="php-email-form">
                     <script>
-                        var url = require('url');
-                        var queryData = url.parse(request.url, true).query;
-                        var username = queryData.username;
+                        // 현재 페이지의 URL에서 쿼리 매개변수를 추출합니다.
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const username = urlParams.get('username');
+                    
+                        // 추출한 username 값을 HTML 폼 필드에 할당합니다.
+                        document.getElementById('username').value = username || '';
                     </script>
                     <div class="form-group">
                         <input type="hidden" class="form-control" name="username" id="username" value="<%= username || '' %>">
