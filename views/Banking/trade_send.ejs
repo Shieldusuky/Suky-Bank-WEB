@@ -1,11 +1,12 @@
 <%- include("common/header") %>
 
 <script type="text/javascript">
-    function tradeSend() {
-        var membership = "<%= pending.data.membership %>";
-        $('input[name=ceiling]').attr('value', membership);
-
-        document.getElementById('send').submit()
+    window.onload = function() {
+            document.getElementById('submitbutton').onclick = function() {
+                if(parseInt(document.send.amount.value) > 10000) {
+                    alert('잔여 한도가 부족합니다!');
+                }
+            }
     }
 </script>
 
@@ -17,7 +18,7 @@
         <div class="text-center">
             <h1 class="h4 text-gray-900 mb-4">송금</h1>
         </div>
-        <form id="send" class="send" action="/bank/send/post" method="POST" name="send">
+        <form id="send" class="send" action="/bank/send" method="POST" name="send">
             <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
 
@@ -29,9 +30,8 @@
                     </input>
                 </div>
             </div>
-            <input type="hidden" id="ceiling" name="ceiling" value="망한값" />
 
-            <a onclick="tradeSend()" class="btn btn-primary btn-user btn-block" id="submitbutton">
+            <a href="#" onclick="document.getElementById('send').submit()" class="btn btn-primary btn-user btn-block" id="submitbutton">
                 송금
             </a>
             <hr>

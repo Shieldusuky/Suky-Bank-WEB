@@ -38,35 +38,22 @@
     <section class="inner-page contact">
         <div class="container">
             <div class="col-lg-7 mt-5 mt-lg-0 d-flex justify-content-center" style="margin:0 auto;">
-                <form method="get" action="/user/findPassnext" role="form" class="php-email-form">
+                <form method="get" action="/user/smsAuth" role="form" class="php-email-form">
 
                     <div class="form-group">
                         <label for="name">ID</label>
-                        <input type="text" class="form-control" name="username" id="username" value="<%= JSON.stringify(username) %>" required>
+                        <input type="text" class="form-control" name="username" id="username" required>
                     </div>
                     <div class="form-group">
                         <label for="name">전화번호</label>
-                        <input type="tel" class="form-control" name="phone" pattern="[0-9]{3}[0-9]{4}[0-9]{4}" id="phone" value="<%= JSON.stringify(phone) %>" required>
+                        <input type="tel" class="form-control" name="phone" pattern="[0-9]{3}[0-9]{4}[0-9]{4}" id="phone" required>
                     </div>
                     <div class="form-group">
                         <label for="name">인증번호</label>
                         <input type="number" class="form-control" name="smsauth" id="smsauth" maxlength="4" oninput="maxLengthCheck(this)" required>
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="name">새로운 비밀번호</label>
-                        <input type="password" class="form-control" name="password" id="password" required>
-                    </div> -->
-                    <!-- <div class="my-3">
-                      <div class="loading">Loading</div>
-                      <div class="error-message"></div>
-                      <div class="sent-message">Your message has been sent. Thank you!</div>
-                    </div> -->
                     <div class="text-center">
                         <div class="text-center">
-                            <!-- <button style="width: 40%;" type="submit" formmethod="post" formaction="javascript:void(0);" onclick="alert('Alert message')">인증 요청 -->
-                            <!-- <button style="width: 40%;" type="submit" formmethod="post" formaction="/user/findPass">인증 요청
-                            </button> &emsp;&emsp;&emsp; -->
-                            <!-- button style="width: 40%;" type="submit" class="mybtn">변경</button> &emsp;&emsp;&emsp; -->
                             &emsp;&emsp;&emsp; <button style="width: 40%;" type="submit">변경</button> &emsp;&emsp;&emsp;
                         </div>
                     </form>

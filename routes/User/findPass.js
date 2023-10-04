@@ -1,11 +1,12 @@
 var express = require('express');
 const mysql = require('mysql');
 const dbConfig = require('./dbconn'); // MySQL 연결 설정 파일
-var router = express.Router();
-
-const {encryptResponse, decryptRequest} = require('../../middlewares/crypt')
+const Response = require("../../middlewares/Response");
+const {decryptRequest, decryptEnc, encryptResponse} = require("../../middlewares/crypt");
 const axios = require("axios");
-const sha256 = require("js-sha256")
+const sha256 = require("js-sha256");
+
+var router = express.Router();
 
 //인증번호 랜덤 생성 함수
 function generateRandomVerificationCode() {
@@ -16,27 +17,30 @@ function generateRandomVerificationCode() {
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-    // res.render("temp/findPass");
-    res.render("temp/findPass", {select: "findPass"});
+    res.render("temp/findPass", {select: "login"});
 });
 
 
-router.post('/', async function (req, res, next) {
-    const {username, phone} = req.body;
-    const baseData = `{"username": "${username}", "phone": "${phone}"}`;
-    const enData = encryptResponse(baseData);
+//router.post('/', async function (req, res, next) {
+router.post('/', (req, res) => {
+    const username = req.body.username;
+    const phone = req.body.phone;
+    const baseData = `{"username" : "${username}", "phone" : "${phone}"}`
+    let resStatus = ""
+    let resMessage = ""
 
     axios({
         method: "post",
-        url: api_url + "/api/user/findPass",
-        data: enData
+        url: api_url + "/api/User/findPass",
+        data: encryptResponse(baseData)
     }).then((data) => {
-        let result = decryptRequest(data.data);
+        resStatus = decryptRequest(data.data).status
+        resMessage = decryptRequest(data.data).data.message
 
-        if (result.status.code == 200) {
+        if (resStatus.code === 200) {
             const coolsms = require('coolsms-node-sdk').default;
             // apiKey, apiSecret 설정
-            const messageService = new coolsms('apikey', 'api secret');
+            const messageService = new coolsms('NCSXDF6SVD0EQ9MX', 'ZT7GHUS1DXIX4R9IT7GIEN2VCTVB0Q9A');
 
             const auth_num = generateRandomVerificationCode();
             const auth_num_str = auth_num.toString();
@@ -61,22 +65,22 @@ router.post('/', async function (req, res, next) {
                 }
             });
 
-
             // 2건 이상의 메시지를 발송할 때는 sendMany, 단일 건 메시지 발송은 sendOne을 이용해야 합니다. 
-            messageService.sendOne(
-                {
-                to: "01025128819",
-                from: "01025128819",
-                text: auth_num_str
-                }
-                // 1만건까지 추가 가능
-            ).then(res => console.log(res))
-            .catch(err => console.error(err));
-            return res.render("temp/login",{select: "login"});
+            // messageService.sendOne(
+            //     {
+            //     to: "01025128819",
+            //     from: "01025128819",
+            //     text: auth_num_str
+            //     }
+            //     // 1만건까지 추가 가능
+            // ).then(res => console.log(res))
+            // .catch(err => console.error(err));
+            return res.send("<script>alert('인증번호가 발송되었습니다.');location.href = \"/user/smsAuth\";</script>");
+            // return res.render("temp/login", {select: "login"});
         } else {
-            return res.render("temp/signup");
+            res.render("temp/findPass", {select: "findPass", message: resMessage})
         }
     })
-});
+})
 
 module.exports = router;
