@@ -46,18 +46,18 @@ router.post('/', (req, res) => {
             const auth_num_str = auth_num.toString();
 
             //if로 이미 authnum있으면~
-            dbConfig.query(`SELECT * FROM smsauth WHERE username = '${username}'`, function(error, results, fields) {
+            dbConfig.query(`SELECT * FROM smsauths WHERE username = '${username}'`, function(error, results, fields) {
                 if (error) {
                     throw error;
                 }
                 else if(results.length > 0) {
-                    dbConfig.query(`UPDATE smsauth SET authnum = '${auth_num_str}' WHERE username = '${username}'`, function(error, result) {
+                    dbConfig.query(`UPDATE smsauths SET authnum = '${auth_num_str}' WHERE username = '${username}'`, function(error, result) {
                         if (error) {
                             throw error;
                         }
                     });
                 }else {
-                    dbConfig.query(`INSERT INTO smsauth (username, authnum) VALUES ('${username}', '${auth_num_str}')`, function(error, result) {
+                    dbConfig.query(`INSERT INTO smsauths (username, authnum) VALUES ('${username}', '${auth_num_str}')`, function(error, result) {
                         if (error) {
                             throw error;
                         }

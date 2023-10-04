@@ -34,7 +34,7 @@ create table beneficiaries
     approved                   boolean default false NOT NULL
 ) engine = innodb;
 
-create table smsauth
+create table smsauths
 (
     id                         integer PRIMARY KEY auto_increment,
     username                   varchar(100) UNIQUE   NOT NULL,
