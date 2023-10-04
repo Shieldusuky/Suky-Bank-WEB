@@ -8,7 +8,8 @@ const sha256 = require("js-sha256")
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-    res.render("temp/smsAuth", {select: "smsAuth"});
+    var username = req.query.username;
+    res.render("temp/smsAuth", {select: "smsAuth", username: username});
 });
 
 router.post('/', (req, res) => {

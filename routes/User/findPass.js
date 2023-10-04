@@ -17,7 +17,8 @@ function generateRandomVerificationCode() {
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-    res.render("temp/findPass", {select: "login"});
+    var username = req.query.username;
+    res.render("temp/findPass", {select: "login", username: username});
 });
 
 
@@ -75,7 +76,8 @@ router.post('/', (req, res) => {
             //     // 1만건까지 추가 가능
             // ).then(res => console.log(res))
             // .catch(err => console.error(err));
-            return res.send("<script>alert('인증번호가 발송되었습니다.');location.href = \"/user/smsAuth\";</script>");
+            //return res.send("<script>alert('인증번호가 발송되었습니다.');location.href = \"/user/smsAuth?username=${username}\";</script>");
+            return res.send(`<script>alert('인증번호가 발송되었습니다.');location.href = \"/user/smsAuth?username=${username}\";</script>`);
             // return res.render("temp/login", {select: "login"});
         } else {
             res.render("temp/findPass", {select: "findPass", message: resMessage})
