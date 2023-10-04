@@ -1,6 +1,6 @@
 var express = require('express');
 const mysql = require('mysql');
-const dbConfig = require('./dbconn'); // MySQL 연결 설정 파일
+const dbConfig = require('../../middlewares/userdb'); // MySQL 연결 설정 파일
 const Response = require("../../middlewares/Response");
 const {decryptRequest, decryptEnc, encryptResponse} = require("../../middlewares/crypt");
 const axios = require("axios");
