@@ -12,10 +12,9 @@ router.get('/', function (req, res, next) {
     res.render("temp/smsAuth", {select: "smsAuth"});
 });
 
-
 router.post('/', async function (req, res, next) {
-    const {username, phone} = req.body;
-    const baseData = `{"username": "${username}", "phone": "${phone}"}`;
+    const {username, smsauth} = req.body;
+    const baseData = `{"username": "${username}", "authnum" : "${smsauth}"}`;
     const enData = encryptResponse(baseData);
 
     axios({
@@ -28,7 +27,7 @@ router.post('/', async function (req, res, next) {
         if (result.status.code == 200) {
             return res.send("<script>alert('인증이 완료되었습니다.');location.href = \"/user/findPassnext\";</script>");
         } else {
-            return res.render("temp/smsAuth");
+            return res.send("<script>alert('인증에 실패하였습니다.');location.href = \"/user/findPass\";</script>");
         }
     })
 });
