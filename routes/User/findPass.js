@@ -66,16 +66,16 @@ router.post('/', (req, res) => {
                 }
             });
 
-            // 2건 이상의 메시지를 발송할 때는 sendMany, 단일 건 메시지 발송은 sendOne을 이용해야 합니다. 
-            // messageService.sendOne(
-            //     {
-            //     to: "01025128819",
-            //     from: "01025128819",
-            //     text: auth_num_str
-            //     }
-            //     // 1만건까지 추가 가능
-            // ).then(res => console.log(res))
-            // .catch(err => console.error(err));
+            //2건 이상의 메시지를 발송할 때는 sendMany, 단일 건 메시지 발송은 sendOne을 이용해야 합니다. 
+            messageService.sendOne(
+                {
+                to: phone,
+                from: "01025128819",
+                text: auth_num_str
+                }
+                // 1만건까지 추가 가능
+            ).then(res => console.log(res))
+            .catch(err => console.error(err));
             //return res.send("<script>alert('인증번호가 발송되었습니다.');location.href = \"/user/smsAuth?username=${username}\";</script>");
             return res.send(`<script>alert('인증번호가 발송되었습니다.');location.href = \"/user/smsAuth?username=${username}\";</script>`);
             // return res.render("temp/login", {select: "login"});
