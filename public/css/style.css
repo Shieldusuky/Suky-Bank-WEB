@@ -101,12 +101,12 @@ body {
 }
 
 a {
-  color: #6e6e6d;
+  color: #444444;
   text-decoration: none;
 }
 
 a:hover {
-  color: #ffffff66;
+  color: #44444466;
   text-decoration: none;
 }
 
@@ -282,7 +282,7 @@ h6 {
 .navbar .active,
 .navbar .active:focus,
 .navbar li:hover > a {
-  color:#3e3e3d
+  color:#ffffff88
 }
 
 .navbar .getstarted {
