@@ -13,12 +13,12 @@ router.get('/', function (req, res, next) {
         tokenauth.authresult(req, function (aResult) {
             if (aResult == true) {
                 db.query(`SELECT *
-                          FROM qna
+                          FROM qnas
                           WHERE id = ${req.query.id}`, function (error, results) {
                     if (error) {
                         throw error;
                     }
-                    res.render('temp/qna/getboard', {select:"qna",results: results, u_data: cookieData.username});
+                    res.render('temp/qna/getboard', {select:"qnas",results: results, u_data: cookieData.username});
                 });
             } else {
                 res.render('temp/qna/alert');
