@@ -31,22 +31,11 @@ router.get("/", checkCookie, async (req, res) => {
 router.post("/post", checkCookie, function (req, res, next) {
     const cookie = req.cookies.Token;
     let json_data = {};
+    let result = {};
 
     json_data['to_account'] = parseInt(req.body.to_account);   //데이터가 숫자로 들어가야 동작함
     json_data['amount'] = parseInt(req.body.amount);
     json_data['sendtime'] = seoultime;
-
-    if(!(json_data['to_account']) || !(json_data['amount'])) {
-        res.send(`<script>
-            location.href = \"/bank/send\";
-            alert('올바른 값을 입력해 주세요.');
-        </script>`);
-    } else if(req.body.ceiling === "FRIEND" && json_data['amount'] > 10000) {
-        res.send(`<script>
-            location.href = \"/bank/send\";
-            alert('거래 한도 초과입니다.');
-        </script>`);
-    }
 
     const en_data = encryptResponse(JSON.stringify(json_data));// 객체를 문자열로 반환 후 암호화
     axios({
@@ -55,10 +44,22 @@ router.post("/post", checkCookie, function (req, res, next) {
         headers: {"authorization": "1 " + cookie},
         data: en_data
     }).then((data) => {
-        console.log(decryptRequest(data.data));
-    });
+        result = decryptRequest(data.data);
+        statusCode = result.data.status;
+        message = result.data.message;
 
-    res.send("<script>location.href = \"/bank/list\";</script>");
+        if(statusCode != 200) {
+            res.send(`<script>
+            alert("${message}");
+            location.href=\"/bank/send\";
+            </script>`);
+        } else {
+            res.send(`<script>
+            alert("${message}");
+            location.href=\"/bank/list\";
+            </script>`);
+        }
+    });
 });
 
 module.exports = router;
