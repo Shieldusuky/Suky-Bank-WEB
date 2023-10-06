@@ -67,12 +67,16 @@ router.get('/', checkCookie, function (req, res) {
                     html += 
                     `<tbody>
                         <tr>
-                            <td>${x.username}</td>
-                            <td>${x.membership}</td>
-                            <td><a class="btn btn-secondary btn-user btn-block">GOLD로 승급</td>
+                            <td>${x.username}</td>`
+                    if(x.membership === "PREMIUM") {
+                    html += `<td><b>${x.membership}</b></td>`} else {
+                    html += `<td>${x.membership}</td>`}
+                    html += 
+                            `<td><a class="btn btn-secondary btn-user btn-block">GOLD로 승급</td>
                             <td><a href="/bank/membership/change?id=${x.id}" class="btn btn-info btn-user btn-block">PREMIUM으로 승급</td>
                         </tr>
                     </tbody>`
+
                 })
             } else if (resStatus.code === 200) {
                 if(resData.membership === "ADMIN") {
