@@ -1,0 +1,53 @@
+[npm 명령 정리] 
+npm
+npm install express
+npm install --save-dev nodemon
+Window : C:\User\사용자명\AppData\Roaming\npm 생성 [전역npm]
+npx -> 전역 설치 X but 전역 설치 효과
+npm install --global rimraf -> rm -rf / npx rm -rf [파일명]
+npm outdated			: 업데이트 패키지 확인
+npm update [패키지 이름]		: 업데이트
+npm uninstall [패키지 이름]		: 패키지 제거
+npm search [검색어]		: 패키지 검색
+npm info [패키지 이름]		: 패키지 세부 정보
+npm login			: npm 공식 로그인 (사이트 우선 가입 / 재배포 X면 가입 필요 없음)
+
+
+[Mysql 시퀄라이즈 설치]
+npm i express morgan nunjucks sequelize sequelize-cli mysql2
+
+
+[단축 명령/옵션]
+npm install -> npm i
+--save-dev -> -D
+--global -> -g
+
+
+
+### 실습 테스트 ###
+http://61.81.184.183:63000
+
+insert into [테이블명](컬럼값1, 컬럼값2, ....) values(값1, 값2, .....);
+delete from [테이블명] where 조건;
+update [테이블명] set [컬럼명]=[값] ;
+
+
+[Mysql DB 순번 초기화 명령어]
+
+1) 문법 - id 순서 초기화
+ALTER TABLE [테이블명] AUTO_INCREMENT=1;
+SET @COUNT = 0;
+UPDATE [테이블명] SET [컬럼명] = @COUNT:=@COUNT+1;
+
+2) 예문
+ALTER TABLE users AUTO_INCREMENT=1;
+SET @COUNT = 0;
+UPDATE users SET id = @COUNT:=@COUNT+1;
+
+ALTER TABLE beneficiaries AUTO_INCREMENT=1;
+SET @COUNT = 0;
+UPDATE beneficiaries SET id = @COUNT:=@COUNT+1;
+
+ALTER TABLE transactions AUTO_INCREMENT=1;
+SET @COUNT = 0;
+UPDATE transactions SET id = @COUNT:=@COUNT+1;

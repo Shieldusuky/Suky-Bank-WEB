@@ -1,0 +1,203 @@
+[Window IP 주소] : 192.168.46.1	// http://192.168.46.1:3000
+[Linux IP 주소] : 192.168.41.130	// http://192.168.41.130:3000
+네트워크 활성화 명령어 : sudo nmcli networking on
+###########################################[ API 연결하기 ]##################################
+
+1. Node.js 및 npm 설치
+sudo apt update
+sudo apt install nodejs npm -y
+
+2. Backend 파일 zip으로 압축 -> 해당 파일 리눅스로 옮겨서 압축 해제
+cd ./Downloads
+mkdir BackendServer
+unzip BackendServer.zip
+
+3. Express 프레임워크 설치
+sudo npm install express
+
+4. MySQL 설치
+sudo apt install mysql-server
+(sudo ufw allow mysql) - 나중에 실습하는데 방화벽 에러 있는 경우에 해당 명령 사용
+
+5. MySQL 시작
+sudo systemctl start mysql
+
+6. MySQL 접속 - 데이터 베이스 Import
+sudo mysql -u root -p
+CREATE DATABASE dvba;
+USE dvba;
+SOURCE [schema+data.sql 파일 Path] -> 예) SOURCE /home/hwang/Downloads/BackendServer/database/schema+data.sql
+
+7. 아이디 추가 ( root 원격 접속은 기본적으로 제한이 있기 때문에 아이디 생성 )
+CREATE USER 'suky'@'%' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON *.* TO 'suky'@'%';
+FLUSH PRIVILEGES;
+
+# 아래 명령은 원격 접속 자체가 막혔을 경우 실행
+sudo mysql_secure_installation -> 질문 중에 원격 접속을 제한하겠다 -> N, 설정을 저장하겠다 -> Y, 나머지는 알아서
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '1234';
+mysql> flush privileges;
+
+8. /etc/mysql/mysql.conf.d/mysqld.cnf 파일 수정
+sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+##########################################3
+	# bind-address = 127.0.0.1	-> 주석처리하고 아래 명령 삽입
+	bind-address = 0.0.0.0	
+##########################################3
+
+sudo systemctl restart mysql
+
+9. config.json파일 ip, 변경
+username = suky로 변경
+password = 1234로 변경
+host = [리눅스 IP 주소]
+
+10. 서버 실행 -> www 2개 이상 뜨면 재부팅
+sudo npx npm install
+sudo npx npm install pm2 -g
+sudo npx pm2 start ./bin/www --watch --ignore-watch="public/*"
+
+### 실시간 검색
+sudo npx npm start ./bin/www --watch --ignore-watch="public/*"
+
+###############################[Android App + Web's API]#########################################
+<안드로이드 앱에 Web의 API를 연결하는 작업>
+리눅스 : 192.168.41.131
+
+APP Health Check Input : http://192.168.41.131:3000
+
+1. Node.js 및 npm 설치
+sudo apt update
+sudo apt install nodejs npm -y
+
+2. Backend 파일 zip으로 압축 + database.sql 복사해서 넣기 -> 해당 파일 리눅스로 옮겨서 압축 해제
+cd ./Downloads
+mkdir BackendServer
+unzip BackendServer.zip
+
+3. Express 프레임워크 설치
+sudo npm install express
+
+4. MySQL 설치
+sudo apt install mysql-server
+(sudo ufw allow mysql) -> 원래 방화벽 자동으로 열림, 안된 경우 해당 명령 실행
+
+5. MySQL 시작
+sudo systemctl start mysql
+
+6. MySQL 접속 - 'database.sql' Import
+sudo mysql -u root -p
+CREATE DATABASE dvba;
+USE dvba;
+SOURCE [database.sql 파일 Path] -> 예) SOURCE /home/hwang/Downloads/BackendServer/database/database.sql
+
+7. 아이디 추가 ( root 원격 접속은 허용으로 해도 외부 접속 시 제한이 있는 경우가 있음 )
+CREATE USER 'suky'@'%' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON *.* TO 'suky'@'%';
+FLUSH PRIVILEGES;
+
+# 외부에서 root 원격 접속이 제한된 경우 아래 명령 실행
+sudo mysql_secure_installation -> 질문 중에 원격 접속을 제한하겠다 -> N / 설정을 저장하겠다 -> Y / 나머지는 알아서
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '1234';
+mysql> flush privileges;
+
+8. /etc/mysql/mysql.conf.d/mysqld.cnf 파일 수정
+sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+###################
+	  bind-address = 0.0.0.0
+	# bind-address = 127.0.0.1 -> 주석처리하고 위의 구문 삽입
+####################
+
+
+sudo systemctl restart mysql
+
+9. config.json파일 ip, 변경
+username = suky로 변경
+password = 1234로 변경
+host = [리눅스 IP 주소]로 변경
+
+10. 서버 실행 -> www 2개 이상 뜨면 재부팅 // 크러시 뜨면 재부팅
+sudo npx npm install
+sudo npx npm install pm2 -g
+sudo npx pm2 start ./bin/www --watch --ignore-watch="public/*"
+
+### 실시간 검색 -> 이거로 하면 db 관련 실행 결과 모니터링 할 수 있음
+sudo npx npm start ./bin/www --watch --ignore-watch="public/*"
+
+
+########################################
+apk 추출하는 방법
+https://learn2you.tistory.com/82
+
+
+
+####################[Cloud API Test]############################
+Android : Damn Vulnerable Bank
+API : RED-TEAM-API
+
+[1] 클라우드 Web Server 생성
+1. 대역 설정
+	IP대역	:	
+	CIDR	:	
+2. VPC 생성
+3. 서브넷 생성
+4. 라우팅 테이블 생성
+5. 인터넷 게이트 웨이 생성 + VPC에 연결
+6. 라우팅 테이블 설정 변경 : '0.0.0.0 -> igw' 라우팅 추가
+7. EC2 인스턴스 생성
+	- Ubuntu 20.04 프리티어
+	- 보안그룹 설정(기본)
+	- 인스턴스 t2.micro 사용
+	- 키 페어 : 받은 키 사용 ( 프라이빗 키 - suky-bank-moblie-api-test-key.pem )
+	- 네트워크 설정 : VPC와 서브넷 확인 / 퍼블릭 IP 자동 할당 X
+8. 탄력적 IP 주소 할당 및 연결
+	- 생성 후 -> 작업 -> 탄력적 IP 주소 연결
+9. 보안 관리
+[NACL]
+	- 0.0.0.0 | 0-65535
+[SG]
+	- 0.0.0.0 | 0-65535
+10. 키 보안 설정하기
+	[속성] - [고급] - [상속 사용 안함] - [모두 제거] - [추가] - [보안주체 선택] - [고급] - [지금 찾기] - [USER | DESKTOP] - [모든 권한 체크 박스]
+	ssh -i "suky-bank-moblie-api-test-key.pem" ubuntu@[퍼블릭 IP 주소]
+
+
+######################################[API와 APP 연결 테스트]#########################################################
+[Local]
+ssh -i "파일명" ubuntu@[퍼블릭 IP 주소]:/home/ubuntu
+
+[Ubuntu]
+1) 설치 파일 목록
+sudo apt-get update
+sudo apt install vim
+sudo apt install nodejs npm -y
+sudo apt install express
+sudo npm install express
+sudo apt install mysql-server
+
+mkdir backend
+mv RED-TEAM-API.zip backend/
+cd backend/
+sudo apt install unzip
+unzip RED-TEAM-API.zip
+
+vi database.sql -> NOT NULL 설정 제거
+
+vi /etc/mysql/mysql.conf.d/mysqld.cnf -> 주소 0.0.0.0 개방
+
+sudo systemctl restart mysql
+
+vim config/config.json -> 계정 / 비번 / ip 주소 변경
+  
+sudo npx npm install
+sudo npx npm install pm2 -g
+sudo npx npm start ./bin/wwww --watch --ignore-watch="public/*"
+
+
+####################################################
+모든 네트워크 Open
+sudo nmcli networking on
+
+
+
+
