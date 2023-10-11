@@ -29,7 +29,7 @@ router.get('/', function (req, res, next) {
             tokenauth.admauthresult(req, function (aResult) {
                 if (aResult == true) {
                     db.query(`SELECT *
-                              FROM notice
+                              FROM notices
                               where id = ${
                                       req.query.id
                               }`, function (error, results) {
@@ -37,7 +37,7 @@ router.get('/', function (req, res, next) {
                             throw error;
                         }
                         res.render('temp/notice/editBoard', {
-                            select: "notice",
+                            select: "notices",
                             results: results,
                             u_data: cookieData.username,
                             tempid: req.query.id
@@ -65,7 +65,7 @@ router.post('/edit', checkCookie, upload.single("imgimg"), function (req, res, n
         }
         const {title, contents, pid, deletepath} = req.body;
 
-        db.query(`UPDATE notice
+        db.query(`UPDATE notices
                   SET title     = '${title}',
                       content   = '${contents}',
                       filepath  = '${filepath}',
@@ -85,7 +85,7 @@ router.post('/edit', checkCookie, upload.single("imgimg"), function (req, res, n
 
         const {title, contents, pid} = req.body;
 
-        db.query(`UPDATE notice
+        db.query(`UPDATE notices
                   SET title     = '${title}',
                       content   = '${contents}',
                       updatedAt = '${seoultime}'

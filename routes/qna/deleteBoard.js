@@ -9,7 +9,7 @@ router.get('/', function (req, res, next) {
         if (aResult === true) {
 
             db.query(`DELETE
-                      FROM qna
+                      FROM qnas
                       WHERE id = ${req.query.id}`, function (error, results) {
                 if (error) {
                     throw error;

@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
     profile(cookie).then((data) => {
         var cookieData = data.data;
         db.query(`SELECT *
-                  FROM notice
+                  FROM notices
                   WHERE id = '${req.query.id}'`, function (error, results) {
             if (error) {
                 throw error;
@@ -18,12 +18,12 @@ router.get('/', function (req, res, next) {
             var path = results[0].filepath
             var fpp =  results[0].filepath.replace('public', '');
             
-            res.render('temp/notice/getboard', {select:"notice",results: results, fpp:fpp, u_data: cookieData.username, path:path});
+            res.render('temp/notice/getboard', {select:"notices",results: results, fpp:fpp, u_data: cookieData.username, path:path});
         });
     });
 }else{
     db.query(`SELECT *
-                  FROM notice
+                  FROM notices
                   WHERE id = '${req.query.id}'`, function (error, results) {
             if (error) {
                 throw error;
@@ -31,7 +31,7 @@ router.get('/', function (req, res, next) {
             var path = results[0].filepath
             var fpp =  results[0].filepath.replace('public', '');
             
-            res.render('temp/notice/getboard', {select:"notice",results: results, fpp:fpp, path:path});
+            res.render('temp/notice/getboard', {select:"notices",results: results, fpp:fpp, path:path});
         });
 }
 });

@@ -13,13 +13,13 @@ router.get('/', function (req, res, next) {
         tokenauth.authresult(req, function (aResult) {
             if (aResult == true) {
                 db.query(`SELECT *
-                          FROM qna
+                          FROM qnas
                           where id = ${req.query.id}`, function (error, results) {
                     if (error) {
                         throw error;
                     }
                     res.render('temp/qna/editBoard', {
-                        select: "qna",
+                        select: "qnas",
                         u_data: cookieData.username,
                         results: results,
                         tempid: req.query.id
@@ -36,7 +36,7 @@ router.post('/edit', function (req, res, next) {
     const {title, contents, pid} = req.body;
     //will be extracted from token
 
-    db.query(`UPDATE qna
+    db.query(`UPDATE qnas
               SET title     = '${title}',
                   content   = '${contents}',
                   updatedAt = '${seoultime}'

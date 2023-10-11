@@ -13,7 +13,7 @@ const profile = require("../../middlewares/profile")
 // });
 router.get('/', function (req, res, next) {
     db.query(`SELECT *
-              FROM notice
+              FROM notices
               ORDER BY id DESC`, function (error, results) {
 
         if (error) {
@@ -70,7 +70,7 @@ router.post("/", (req, res) => {
     const select2 = req.body.select2
 
     db.query(`SELECT *
-              FROM notice
+              FROM notices
               ORDER BY id DESC`, function (error, results) {
 
         if (error) {

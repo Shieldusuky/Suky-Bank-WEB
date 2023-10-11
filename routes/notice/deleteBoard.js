@@ -10,14 +10,14 @@ router.get('/', function (req, res, next) {
         tokenauth.admauthresult(req, function (aResult) {
             if (aResult == true) {
                 db.query(`SELECT filepath
-                          FROM notice
+                          FROM notices
                           WHERE id = ${req.query.id}`, function (error, results) {
                     if (error) {
                         throw error;
                     }
                     var fp = results[0].filepath
                     db.query(`DELETE
-                              FROM notice
+                              FROM notices
                               WHERE id = ${req.query.id}`, function (error, results) {
                         if (error) {
                             throw error;

@@ -10,13 +10,13 @@ router.get("/", function (req, res, next) {
         profile(cookie).then((data) => {
             var cookieData = data.data;
             db.query(`SELECT *
-                      FROM notice
+                      FROM notices
                       ORDER BY id DESC`, function (error, results) {
                 if (error) {
                     throw error;
                 }
                 res.render("temp/notice/viewboard", {
-                    select: "notice",
+                    select: "notices",
                     results: results,
                     u_data: cookieData.username
                 });
@@ -24,12 +24,12 @@ router.get("/", function (req, res, next) {
         });
     } else {
         db.query(`SELECT *
-                  FROM notice`, function (error, results) {
+                  FROM notices`, function (error, results) {
             if (error) {
                 throw error;
             }
             res.render("temp/notice/viewboard", {
-                select: "notice",
+                select: "notices",
                 results: results
             });
         });

@@ -27,7 +27,7 @@ router.get("/", function (req, res, next) {
             var cookieData = data.data;
             tokenauth.admauthresult(req, function (aResult) {
                 if (aResult == true) {
-                    res.render("temp/notice/writeBoard", {select: "notice", u_data: cookieData.username});
+                    res.render("temp/notice/writeBoard", {select: "notices", u_data: cookieData.username});
                 } else {
                     res.render("temp/notice/alert");
                 }
@@ -66,7 +66,7 @@ router.post(
             var userId = data.data.username;
 
             db.query(
-                `INSERT INTO notice
+                `INSERT INTO notices
                  VALUES (NULL, '${userId}', '${title}', '${contents}', '${filepath}', '${seoultime}', '${seoultime}
                           ')`,
                 function (error, results) {

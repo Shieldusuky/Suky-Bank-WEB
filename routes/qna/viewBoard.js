@@ -14,14 +14,14 @@ router.get("/", function (req, res, next) {
             profile(cookie).then((data) => {
                 if (data.data.is_admin) {
                     db.query(`SELECT *
-                              FROM qna`, function (error, results) {
+                              FROM qnas`, function (error, results) {
                         if (error) {
                             throw error;
                         }
 
                         var cookieData = data.data;
                         res.render("temp/qna/viewboard", {
-                            select: "qna",
+                            select: "qnas",
                             u_data: cookieData.username,
                             results: results,
                         });
@@ -30,14 +30,14 @@ router.get("/", function (req, res, next) {
                 } else {
                     var userId = data.data.username;
                     db.query(`SELECT *
-                              FROM qna
+                              FROM qnas
                               where userId = '${userId}'`, function (error, results) {
                         if (error) {
                             throw error;
                         }
                         var cookieData = data.data;
                         res.render("temp/qna/viewboard", {
-                            select: "qna",
+                            select: "qnas",
                             u_data: cookieData.username,
                             results: results,
                         });

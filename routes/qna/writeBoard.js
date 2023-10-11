@@ -13,7 +13,7 @@ router.get('/', function (req, res, next) {
         var cookieData = data.data;
         tokenauth.authresult(req, function (aResult) {
             if (aResult == true) {
-                res.render('temp/qna/writeBoard', {select:"qna",u_data: cookieData.username});
+                res.render('temp/qna/writeBoard', {select:"qnas",u_data: cookieData.username});
             } else {
                 res.render('temp/qna/alert');
             }
@@ -26,7 +26,7 @@ router.post('/write', function (req, res, next) {
     const {title, contents} = req.body;
     profile(cookie).then((data) => {
         var userId = data.data.username;
-        db.query(`INSERT INTO qna
+        db.query(`INSERT INTO qnas
                   VALUES (NULL, '${userId}', '${title}', '${contents}', '${seoultime}', '${seoultime}', NULL)`, function (error, results) {
             if (error) {
                 throw error;
