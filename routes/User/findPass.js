@@ -41,7 +41,7 @@ router.post('/', (req, res) => {
         if (resStatus.code === 200) {
             const coolsms = require('coolsms-node-sdk').default;
             // apiKey, apiSecret 설정
-            const messageService = new coolsms('NCSXDF6SVD0EQ9MX', 'ZT7GHUS1DXIX4R9IT7GIEN2VCTVB0Q9A');
+            const messageService = new coolsms('NCSJNBLDEOQZTVKQ', 'UCJV18RJCZSDJGGONWZXM6D2LVYJJBWB');
 
             const auth_num = generateRandomVerificationCode();
             const auth_num_str = auth_num.toString();
@@ -70,15 +70,13 @@ router.post('/', (req, res) => {
             messageService.sendOne(
                 {
                 to: phone,
-                from: "01025128819",
+                from: "01027638820",
                 text: auth_num_str
                 }
                 // 1만건까지 추가 가능
             ).then(res => console.log(res))
             .catch(err => console.error(err));
-            //return res.send("<script>alert('인증번호가 발송되었습니다.');location.href = \"/user/smsAuth?username=${username}\";</script>");
             return res.send(`<script>alert('인증번호가 발송되었습니다.');location.href = \"/user/smsAuth?username=${username}\";</script>`);
-            // return res.render("temp/login", {select: "login"});
         } else {
             res.render("temp/findPass", {select: "findPass", message: resMessage})
         }
