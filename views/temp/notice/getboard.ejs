@@ -40,7 +40,7 @@
                             <a href="/notice/editBoard?id=<%= data.id %>">수정하기</a>
                             <a href="/notice/deleteBoard?id=<%= data.id %>">삭제하기</a>
                         </div>
-                        <% if(path !== ""){ %>
+                        <% if(path !== "null"){ %>
                         <div class="portfolio-info">
                             <a href="/notice/download?url=<%= path %>" class="btn btn-secondary btn-user btn-block">
                                 Download

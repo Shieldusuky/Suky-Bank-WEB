@@ -76,8 +76,8 @@ router.post('/', (req, res) => {
                 // 1만건까지 추가 가능
             ).then(res => console.log(res))
             .catch(err => console.error(err));
-            //return res.send(`<script>alert('인증번호가 발송되었습니다.');location.href = \"/user/smsAuth?username=${username}\";</script>`);
-            res.render(`/user/smsAuth?username=${username}`, {select: "smsAuth", message: resMessage});
+            return res.send(`<script>alert('인증번호가 발송되었습니다.');location.href = \"/user/smsAuth?username=${username}\";</script>`);
+            //res.render(`/user/smsAuth?username=${username}`, {select: "smsAuth", message: resMessage});
         } else {
             res.render("temp/findPass", {select: "findPass", message: resMessage})
         }

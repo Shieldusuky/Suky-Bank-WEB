@@ -32,7 +32,7 @@ const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
             console.log(req.body.fid);
-            cb(null, "./");
+            cb(null, "../tmpupload");
         },
         filename: function (req, file, cb) {
             cb(null, file.originalname);
@@ -61,7 +61,7 @@ router.post(
                         title: title,
                         contents: contents,
                         userId: userId,
-                        imgimg: fs.createReadStream(req.file.path), // 파일 업로드 필드와 파일 경로
+                        imgimg: fs.createReadStream(req.file.path),
                     },
                 }, 
                 function (error, response, body) {
@@ -80,11 +80,10 @@ router.post(
                     });
                 });
             }
-
             // 데이터베이스에 데이터를 삽입
             db.query(
                 `INSERT INTO notices
-                 VALUES (NULL, '${userId}', '${title}', '${contents}', '${req.file ? req.file.originalname : ''}', '${seoultime}', '${seoultime}')`,
+                 VALUES (NULL, '${userId}', '${title}', '${contents}', '${req.file ? req.file.originalname : "null"}', '${seoultime}', '${seoultime}')`,
                 function (error, results) {
                     if (error) {
                         throw error;
