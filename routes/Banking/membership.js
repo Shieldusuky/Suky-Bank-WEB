@@ -9,33 +9,8 @@ var userdb = require('../../middlewares/userdb');
 
 /* !!! GOLD는 가짜버튼 !!! */
 
-HTML_MEMBER = `
-    <thead>
-        <tr>
-            <th>회원 등급</th>
-            <th>FRIEND</th>
-            <th>GOLD</th>
-            <th>PREMIUM</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td><b>누적 이용 기간</b></td>
-            <td>최초 가입</td>
-            <td>1달 이상</td>
-            <td>1년 이상</td>
-        </tr>
-        <tr>
-            <td><b>거래 한도</b></td>
-            <td>하루 최대 $ 10,000</td>
-            <td>하루 최대 $ 50,000</td>
-            <td>하루 최대 $ 10,000,000</td>
-        </tr>
-        <tr>
-            <td><b>비고</b></td>
-            <td colspan="3">등급에 관한 자세한 문의는 관리자에게 해 주세요.</td>
-        </tr>
-    </tbody>`
+HTML_PNG = `<img src="http://127.0.0.1:3001/img/membership.png" style="width:100%;">`
+// HTML_PNG = `<img src="http://www.sukybank.com/img/membership.png">`
 
 router.get('/', checkCookie, function (req, res) {
     const cookie = req.cookies.Token
@@ -60,7 +35,7 @@ router.get('/', checkCookie, function (req, res) {
                     "      <th>현재 멤버십</th>\n" +
                     "      <th colspan='2'>권한 상승</th>\n" +
                     "   </tr>\n" +
-                    "</thead>\n"
+                    "</thead>\n" + HTML_PNG
                 
                 const printData = resData.slice(1,)
                 printData.forEach(x => {
@@ -72,10 +47,10 @@ router.get('/', checkCookie, function (req, res) {
                     html += `<td><b>${x.membership}</b></td>`} else {
                     html += `<td>${x.membership}</td>`}
                     html += 
-                            `<td><a class="btn btn-secondary btn-user btn-block">GOLD로 승급</td>
-                            <td><a href="/bank/membership/change?id=${x.id}" class="btn btn-info btn-user btn-block">PREMIUM으로 승급</td>
-                        </tr>
-                    </tbody>`
+                        `<td><a href="/bank/membership/downgrade?id=${x.id}" class="btn btn-danger btn-user btn-block">FRIEND로 강등</td>
+                        <td><a href="/bank/membership/upgrade?id=${x.id}" class="btn btn-info btn-user btn-block">PREMIUM으로 승급</td>
+                    </tr>
+                </tbody>`
 
                 })
             } else if (resStatus.code === 200) {
@@ -84,7 +59,7 @@ router.get('/', checkCookie, function (req, res) {
                 }
                 else {
                     html += `<h2 align='center'>회원님의 멤버십 등급은 ${resData.membership}등급입니다.</h2>`
-                    html += HTML_MEMBER
+                    html += HTML_PNG
                 }
             } else {
                 html += "<h2>오류입니다.</h2>"
@@ -94,7 +69,18 @@ router.get('/', checkCookie, function (req, res) {
     })
 });
 
-router.get('/change', [checkCookie, IpCheck], function (req, res, next) {
+router.get('/downgrade', [checkCookie, IpCheck], function (req, res, next) {
+    const id = req.query.id;
+    userdb.query(`UPDATE users
+                  SET membership = 'FRIEND'
+                  WHERE id =${id};`, function (error, results) {
+        if (error) { throw error; }
+    });
+
+    return res.redirect("/bank/membership")
+});
+
+router.get('/upgrade', [checkCookie, IpCheck], function (req, res, next) {
     const id = req.query.id;
     userdb.query(`UPDATE users
                   SET membership = 'PREMIUM'
