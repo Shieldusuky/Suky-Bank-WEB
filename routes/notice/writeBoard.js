@@ -51,25 +51,21 @@ router.post(
         const cookie = req.cookies.Token;
         profile(cookie).then((data) => {
             var userId = data.data.username;
-
-            // 파일 업로드는 필수가 아닌 선택 사항이라면 업로드를 생략합니다
             if (req.file) {
                 // 데이터를 다른 서버로 전송
                 request.post({
-                    url: api_url+'/api/notice/uploadweb/', // 변경된 API 주소
+                    url: api_url+'/api/notice/upload/', // 변경된 API 주소
                     formData: {
                         title: title,
                         contents: contents,
                         userId: userId,
-                        imgimg: fs.createReadStream(req.file.path),
+                        file: fs.createReadStream(req.file.path),
                     },
                 }, 
                 function (error, response, body) {
                     if (error) {
-                        // 오류 처리
                         throw error;
                     }
-                    // 파일 업로드를 생략한 경우를 고려하여 파일 삭제 코드 추가
                     const filePath = req.file.path;
                     fs.unlink(filePath, (err) => {
                         if (err) {

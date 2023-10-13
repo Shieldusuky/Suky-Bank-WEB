@@ -1,6 +1,6 @@
 var express = require('express');
+
 var router = express.Router();
-/* GET home page. */
 const mainRouter = require("../routes/Main")
 const transactionsRouter = require("../routes/Transactions")
 const balanceRouter = require("../routes/Balance");
