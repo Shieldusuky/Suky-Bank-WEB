@@ -32,7 +32,7 @@ const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
             console.log(req.body.fid);
-            cb(null, "../tmpupload");
+            cb(null, req.body.fid);
         },
         filename: function (req, file, cb) {
             cb(null, file.originalname);
@@ -59,6 +59,7 @@ router.post(
                         title: title,
                         contents: contents,
                         userId: userId,
+                        fid: req.body.fid,
                         file: fs.createReadStream(req.file.path),
                     },
                 }, 
