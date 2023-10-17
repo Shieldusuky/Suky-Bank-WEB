@@ -9,7 +9,7 @@ var userdb = require('../../middlewares/userdb');
 
 /* !!! GOLD는 가짜버튼 !!! */
 
-HTML_PNG = `<img src="http://127.0.0.1:3001/img/membership.png" style="width:100%;">`
+HTML_PNG = `<img src="../img/membership.png" style="width:100%;">`
 // HTML_PNG = `<img src="http://www.sukybank.com/img/membership.png">`
 
 router.get('/', checkCookie, function (req, res) {
