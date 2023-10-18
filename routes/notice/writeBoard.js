@@ -5,9 +5,10 @@ var router = express.Router();
 var tokenauth = require("./tokenauth");
 var {decryptEnc,} = require("../../middlewares/crypt");
 const profile = require("../../middlewares/profile");
+const multer = require("multer");
 const checkCookie = require("../../middlewares/checkCookie");
-const httpProxy = require('http-proxy');
-const multer = require('multer')
+var request = require("request");
+const fs = require("fs");
 
 router.get("/", function (req, res, next) {
     if (req.cookies.Token) {
@@ -31,7 +32,7 @@ const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
             console.log(req.body.fid);
-            cb(null, "../file");
+            cb(null, req.body.fid);
         },
         filename: function (req, file, cb) {
             cb(null, file.originalname);
@@ -39,27 +40,56 @@ const upload = multer({
     }),
 });
 
-  // upload 액션 처리
-router.post("/upload", checkCookie, upload.single("file"), function (req, res) {
-    const cookie = req.cookies.Token;
-    const title = req.body.title;
-    const contents = req.body.contents;
-    profile(cookie).then((data) => {
+router.post(
+    "/write",
+    checkCookie,
+    upload.single("imgimg"), // 파일 업로드 설정
+    function (req, res, next) {
+        const { title, contents } = req.body;
+
+        // 클라이언트의 쿠키를 사용하여 사용자 프로필 정보를 가져옵니다.
+        const cookie = req.cookies.Token;
+        profile(cookie).then((data) => {
             var userId = data.data.username;
-             db.query(
-                 `INSERT INTO notices
-                  VALUES (NULL, '${userId}', '${title}', '${contents}', '${req.file ? req.file.originalname : "null"}', '${seoultime}', '${seoultime}')`,
-            function (error, results) {
-                if (error) {
-                    throw error;
-                }
+            if (req.file) {
+                // 데이터를 다른 서버로 전송
+                request.post({
+                    url: api_url+'/api/notice/upload/', // 변경된 API 주소
+                    formData: {
+                        title: title,
+                        contents: contents,
+                        userId: userId,
+                        file: fs.createReadStream(req.file.path),
+                    },
+                }, 
+                function (error, response, body) {
+                    if (error) {
+                        throw error;
+                    }
+                    const filePath = req.file.path;
+                    fs.unlink(filePath, (err) => {
+                        if (err) {
+                            console.error("파일 삭제 중 오류 발생: " + err);
+                        } else {
+                            console.log("파일이 성공적으로 삭제되었습니다.");
+                        }
+                    });
+                });
             }
-        );
-    });
-    const proxy = httpProxy.createProxyServer({});
-    proxyUrl = api_url + "/api/notice"
-    proxy.web(req, res, { target: proxyUrl });
-    res.redirect("../viewBoard");
-});
+            // 데이터베이스에 데이터를 삽입
+            db.query(
+                `INSERT INTO notices
+                 VALUES (NULL, '${userId}', '${title}', '${contents}', '${req.file ? req.file.originalname : "null"}', '${seoultime}', '${seoultime}')`,
+                function (error, results) {
+                    if (error) {
+                        throw error;
+                    }
+                    res.redirect("../viewBoard");
+                }
+            );
+        });
+    }
+);
+
 
 module.exports = router;
