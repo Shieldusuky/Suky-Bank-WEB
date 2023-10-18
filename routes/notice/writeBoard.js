@@ -32,7 +32,7 @@ const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
             console.log(req.body.fid);
-            cb(null, req.body.fid);
+            cb(null, "../file");
         },
         filename: function (req, file, cb) {
             cb(null, file.originalname);
@@ -56,6 +56,7 @@ router.post(
                 request.post({
                     url: api_url+'/api/notice/upload/', // 변경된 API 주소
                     formData: {
+                        fid: req.body.fid,
                         title: title,
                         contents: contents,
                         userId: userId,
