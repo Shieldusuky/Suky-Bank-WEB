@@ -43,14 +43,6 @@ INSERT INTO `users`
 values (default, "admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "01011111111" , 999999, default, true,
         'admin@admin', "ADMIN");
 
-INSERT INTO `users`
-values (default, "user", "04F8996DA763B7A969B1028EE3007569EAF3A635486DDAB211D512C85B9DF8FB", "01022222222" , 123456, default, false,
-        'user@user', "FRIEND");
-
-INSERT INTO `users`
-values (default, "vipuser", "6EBFB8F968B95D2F7B9FD99F399B95364AB747290DA58F8EE0E3E28A2C81880E", "01033333333" , 654321, default, false,
-        'vipuser@vipuser', "PREMIUM");
-
 UPDATE users SET balance=100000000 WHERE username = 'vipuser';
 
 drop database if exists board;
